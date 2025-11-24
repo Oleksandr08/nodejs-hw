@@ -4,18 +4,51 @@ import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
 
 export const getAllNotes = async (req, res) => {
-  const notes = await Note.find();
-  res.status(200).json(notes);
-};
+  const {
+    page = 1,
+    perPage = 10,
+    tag,
+    search,
+    sortBy = '_id',
+    sortOrder = 'asc',
+  } = req.query;
+  const skip = (page - 1) * perPage;
 
+  const notesQuery = Note.find();
+
+  if (search) {
+    notesQuery.where({
+      $text: { $search: search },
+    });
+  }
+
+  if (tag) {
+    notesQuery.where({ tag });
+  }
+
+  const [totalNotes, notes] = await Promise.all([
+    notesQuery.clone().countDocuments(),
+    notesQuery
+      .skip(skip)
+      .limit(perPage)
+      .sort({ [sortBy]: sortOrder }),
+  ]);
+
+  const totalPages = Math.ceil(totalNotes / perPage);
+
+  res.status(200).json({
+    page,
+    perPage,
+    totalNotes,
+    totalPages,
+    notes,
+  });
+};
+// Отримати одну нотатку за id
 export const getNoteById = async (req, res, next) => {
   const { noteId } = req.params;
   const note = await Note.findById(noteId);
-
-  // if (!note) {
-  //   return res.status(404).json({ message: 'Note not found' });
-  // }
-
+  // Додаємо базову обробку помилки замість res.status(404)
   if (!note) {
     next(createHttpError(404, 'Note not found'));
     return;
