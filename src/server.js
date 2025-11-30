@@ -15,7 +15,7 @@ import notesRouters from './routes/notesRoutes.js';
 import { errors } from 'celebrate';
 
 const app = express();
-const PORT = process.env.PORT ?? 3030;
+const PORT = process.env.PORT ?? 3000;
 
 app.use(logger);
 app.use(express.json());
