@@ -13,7 +13,7 @@
     "url": "git+https://github.com/Oleksandr08/nodejs-hw.git"
   },
   "keywords": [],
-  "author": "Oleksandr Shpylovyi",
+  "author": "Oleksandr Shpylovyigit",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Oleksandr08/nodejs-hw/issues"
@@ -27,7 +27,9 @@
     "nodemon": "^3.1.10"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "celebrate": "^15.0.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
